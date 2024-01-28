@@ -1,22 +1,20 @@
 xxxxxxxxxxxxxxxxxxxx
-x                  x
-x                  x
-x                  x
-x                  x
-x                  x
-x                  x
-x                  x
-x                  x
-x                  x
-x                  x
-x                  x
-x,,,,,,,,,,,,,,,,,,x
-x,,,,,,,,,,,,,,,,,,x
-x,,,,,,,,,,,,,,,,,,x
-x,,,,,,,,,,,,,,,,,,x
-x,,,,,,,,,,,,,,,,,,x
-x,,,,,,,,,,,,,,,,,,x
-x,,,,,,,,,,,,,,,,,,x
-x,,,,,,,,,,,,,,,,,,x
-x,,,,,,,,,,,,,,,,,,x
+y                  y
+y p                y
+y  y     xxxxx     y
+y  y         y     y
+y  y         y     y
+y  y         y     y
+y  y         y     y
+y  y         y     y
+y  y         y     y
+y  y         y     y
+y  y         xxx   y
+y                  y
+y                  y
+y                  y
+y                  y
+y                  y
+y                  y
+y                  y
 xxxxxxxxxxxxxxxxxxxx
