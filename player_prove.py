@@ -6,7 +6,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = pygame.image.load('assets/character.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
-
+        self.health = 10
         self.direction = pygame.math.Vector2()
         self.speed = 5
 
@@ -30,23 +30,29 @@ class Player(pygame.sprite.Sprite):
     def collision(self, direction):
         if direction == 'horizontal':
             for sprite in self.obstacles_sprites:
-                if sprite.rect != self.rect and self.rect.colliderect(sprite.rect):
-                    if self.direction.x > 0:
-                        self.rect.right = sprite.rect.left
-                    elif self.direction.x < 0:
-                        self.rect.left = sprite.rect.right
+                if sprite.rect.colliderect(self.rect):
+                    if sprite.type != 'magma':  # Permitir paso por encima de magma
+                        if self.direction.x > 0:  # Moving right
+                            self.rect.right = sprite.rect.left
+                        elif self.direction.x < 0:  # Moving left
+                            self.rect.left = sprite.rect.right
 
         if direction == 'vertical':
             for sprite in self.obstacles_sprites:
-                if sprite.rect != self.rect and self.rect.colliderect(sprite.rect):
-                    if self.direction.y > 0:
-                        self.rect.bottom = sprite.rect.top
-                    elif self.direction.y < 0:
-                        self.rect.top = sprite.rect.bottom
+                if sprite.rect.colliderect(self.rect):
+                    if sprite.type != 'magma':  # Permitir paso por encima de magma
+                        if self.direction.y > 0:  # Moving down
+                            self.rect.bottom = sprite.rect.top
+                        elif self.direction.y < 0:  # Moving up
+                            self.rect.top = sprite.rect.bottom
 
-    def water(self):
-        if self.obstacles_sprites
+    def check_magma_collision(self):
+        for sprite in self.obstacles_sprites:
+            if sprite.type == 'magma' and self.rect.colliderect(sprite.rect):
+                self.health -= 2
+                print(self.health)
 
     def update(self):
         self.input()
         self.move(self.speed)
+        self.check_magma_collision()

@@ -1,3 +1,5 @@
+import pygame.image
+
 from tile import Tile
 from player_prove import *
 from player_prove import Player
@@ -25,7 +27,7 @@ class Level:
                 if col == 'y':
                     Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_x')
                 if col == 'w':
-                    Tile((x,y), [self.visible_sprites, self.obstacles_sprites], 'water')
+                    Tile((x,y), [self.visible_sprites, self.obstacles_sprites], 'magma')
                 if col == 'p':
                     self.player = Player((x, y), [self.visible_sprites], self.obstacles_sprites)
 
@@ -40,9 +42,16 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.half_with = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2()
+
+
     def curstom_draw(self, player):
         self.offset.x = player.rect.centerx - self.half_with
         self.offset.y = player.rect.centery - self.half_height
+
         for sprite in self.sprites():
-            offset_pos = sprite.rect.topleft - self.offset
-            self.display_surface.blit(sprite.image, offset_pos)
+            if sprite != player:
+                offset_pos = sprite.rect.topleft - self.offset
+                self.display_surface.blit(sprite.image, offset_pos)
+
+            offset_pos = player.rect.topleft - self.offset
+            self.display_surface.blit(player.image, offset_pos)

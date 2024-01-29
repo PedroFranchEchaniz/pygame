@@ -12,9 +12,9 @@ y  y         y     y
 y  y         xxx   y
 y                  y
 y                  y
-y                  y
-y                  y
-y                  y
+y        wwww      y
+y  wwww   wwwww    y
+y      wwwww       y
 y                  y
 y                  y
 xxxxxxxxxxxxxxxxxxxx
