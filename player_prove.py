@@ -44,6 +44,9 @@ class Player(pygame.sprite.Sprite):
                     elif self.direction.y < 0:
                         self.rect.top = sprite.rect.bottom
 
+    def water(self):
+        if self.obstacles_sprites
+
     def update(self):
         self.input()
         self.move(self.speed)

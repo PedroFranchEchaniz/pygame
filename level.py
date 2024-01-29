@@ -24,6 +24,8 @@ class Level:
                     Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_y')
                 if col == 'y':
                     Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_x')
+                if col == 'w':
+                    Tile((x,y), [self.visible_sprites, self.obstacles_sprites], 'water')
                 if col == 'p':
                     self.player = Player((x, y), [self.visible_sprites], self.obstacles_sprites)
 

@@ -10,4 +10,8 @@ class Tile(pygame.sprite.Sprite):
             elif tile_type == 'wall_y':
                 image = pygame.image.load('assets/brickx.png').convert_alpha()
                 self.image = pygame.transform.scale(image, (TILESIZE, TILESIZE))
+            elif tile_type == 'water':
+                image = pygame.image.load('assets/water.png').convert_alpha()
+                self.image = pygame.transform.scale(image, (TILESIZE,TILESIZE))
+
             self.rect = self.image.get_rect(topleft=pos)
