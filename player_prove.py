@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
         self.health = 10
         self.direction = pygame.math.Vector2()
         self.speed = 5
-
+        self.last_magma = None
         self.obstacles_sprites = obstacles_sprites
 
     def input(self):
@@ -47,10 +47,19 @@ class Player(pygame.sprite.Sprite):
                             self.rect.top = sprite.rect.bottom
 
     def check_magma_collision(self):
+        current_magma = None
         for sprite in self.obstacles_sprites:
             if sprite.type == 'magma' and self.rect.colliderect(sprite.rect):
-                self.health -= 2
-                print(self.health)
+                current_magma = sprite
+                break
+
+        # Si el personaje entra en un nuevo bloque de lava
+        if current_magma and current_magma != self.last_magma:
+            self.health -= 2
+            print(self.health)
+
+        # Actualiza la última posición de lava
+        self.last_magma = current_magma
 
     def update(self):
         self.input()
