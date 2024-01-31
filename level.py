@@ -1,21 +1,45 @@
 import pygame.image
+import random
 
 from tile import Tile
 from player_prove import *
 from player_prove import Player
+from potion import Potion
 
 class Level:
     def __init__(self):
 
-        #get the display surface
         self.display_surface = pygame.display.get_surface()
 
-        # sptite group setup
+
         self.visible_sprites = YSortCameraGroup()
         self.obstacles_sprites = pygame.sprite.Group()
 
-        # sprite setuo
+        self.map_data, self.object_counts = self.read_map_and_objects('map/map.txt')
+
+        self.free_spaces = []
+
         self.create_map()
+        self.place_objects()
+
+    def read_map_and_objects(self, filename):
+        with open(filename, 'r') as file:
+            object_line = file.readline().strip()
+            map_data = [list(line.strip()) for line in file]
+
+        object_counts = self.parse_object_line(object_line)
+        return map_data, object_counts
+
+    def parse_object_line(self, line):
+        parts = line.split(',')
+        object_counts = {}
+        for part in parts:
+            key, value = part.strip().split('=')
+            object_counts[key] = int(value)
+        return object_counts
+
+
+
 
     def create_map(self):
         for row_index,row in enumerate(WORLD_MAP2):
@@ -30,6 +54,18 @@ class Level:
                     Tile((x,y), [self.visible_sprites, self.obstacles_sprites], 'magma')
                 if col == 'p':
                     self.player = Player((x, y), [self.visible_sprites], self.obstacles_sprites)
+                if col == ' ':
+                    self.free_spaces.append((x, y))
+
+    def place_objects(self):
+        for obj_type, count in self.object_counts.items():
+            for _ in range(count):
+                if self.free_spaces:
+                    pos = random.choice(self.free_spaces)
+                    self.free_spaces.remove(pos)
+                    if obj_type == 'o':
+                        Potion(pos, [self.visible_sprites])
+
 
     def run(self):
         self.visible_sprites.curstom_draw(self.player)

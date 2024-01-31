@@ -1,3 +1,5 @@
+o=2, d=5, b=2, t=1
+
 xxxxxxxxxxxxxxxxxxxx
 y                  y
 y p                y

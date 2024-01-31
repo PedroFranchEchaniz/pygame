@@ -31,19 +31,19 @@ class Player(pygame.sprite.Sprite):
         if direction == 'horizontal':
             for sprite in self.obstacles_sprites:
                 if sprite.rect.colliderect(self.rect):
-                    if sprite.type != 'magma':  # Permitir paso por encima de magma
-                        if self.direction.x > 0:  # Moving right
+                    if sprite.type != 'magma':
+                        if self.direction.x > 0:
                             self.rect.right = sprite.rect.left
-                        elif self.direction.x < 0:  # Moving left
+                        elif self.direction.x < 0:
                             self.rect.left = sprite.rect.right
 
         if direction == 'vertical':
             for sprite in self.obstacles_sprites:
                 if sprite.rect.colliderect(self.rect):
-                    if sprite.type != 'magma':  # Permitir paso por encima de magma
-                        if self.direction.y > 0:  # Moving down
+                    if sprite.type != 'magma':
+                        if self.direction.y > 0:
                             self.rect.bottom = sprite.rect.top
-                        elif self.direction.y < 0:  # Moving up
+                        elif self.direction.y < 0:
                             self.rect.top = sprite.rect.bottom
 
     def check_magma_collision(self):
@@ -53,12 +53,12 @@ class Player(pygame.sprite.Sprite):
                 current_magma = sprite
                 break
 
-        # Si el personaje entra en un nuevo bloque de lava
+
         if current_magma and current_magma != self.last_magma:
             self.health -= 2
             print(self.health)
 
-        # Actualiza la última posición de lava
+
         self.last_magma = current_magma
 
     def update(self):
