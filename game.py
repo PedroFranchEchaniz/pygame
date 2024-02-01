@@ -7,7 +7,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH,HEIGTH))
-        pygame.display.set_caption('El tio paco')
+        pygame.display.set_caption('Game')
         self.clock = pygame.time.Clock()
 
         self.level = Level()
