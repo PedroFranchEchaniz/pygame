@@ -6,6 +6,8 @@ from player_prove import *
 from player_prove import Player
 from potion import Potion
 from coin import Coin
+from bomb import Bomb
+from suit import Suit
 
 class Level:
     def __init__(self):
@@ -74,6 +76,10 @@ class Level:
                         Potion(pos, [self.visible_sprites, self.collectible_sprites])
                     elif obj_type == 'd':
                         Coin(pos, [self.visible_sprites, self.collectible_sprites])
+                    elif obj_type == 'b':
+                        Bomb(pos, [self.visible_sprites, self.collectible_sprites])
+                    elif obj_type == 't':
+                        Suit(pos, [self.visible_sprites, self.collectible_sprites])
 
     def restart_level(self):
         self.visible_sprites.empty()
@@ -98,7 +104,7 @@ class Level:
             self.player_won = True
 
     def display_victory_message(self):
-        font = pygame.font.Font(None, 50)  # Puedes usar una ruta de archivo si tienes una fuente específica
+        font = pygame.font.Font(None, 50)
 
         text_surface = font.render("¡Has ganado!", True, (255, 255, 255))  # Texto blanco
 
