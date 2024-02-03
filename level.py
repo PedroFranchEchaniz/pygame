@@ -45,25 +45,22 @@ class Level:
             object_counts[key] = int(value)
         return object_counts
 
-
-
-
     def create_map(self):
-        for row_index,row in enumerate(WORLD_MAP2):
+        for row_index, row in enumerate(WORLD_MAP2):
             for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
                 if col == 'x':
-                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_y')
-                if col == 'y':
-                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_x')
-                if col == 'w':
-                    Tile((x,y), [self.visible_sprites, self.obstacles_sprites], 'magma')
-                if col == 'p':
+                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_y', self.obstacles_sprites)
+                elif col == 'y':
+                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_x', self.obstacles_sprites)
+                elif col == 'w':
+                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'magma', self.obstacles_sprites)
+                elif col == 'p':
                     self.player = Player((x, y), [self.visible_sprites], self.obstacles_sprites,
                                          self.collectible_sprites, self)
                     self.player.coins = 0
-                if col == ' ':
+                elif col == ' ':
                     self.free_spaces.append((x, y))
 
     def place_objects(self):
@@ -77,7 +74,8 @@ class Level:
                     elif obj_type == 'd':
                         Coin(pos, [self.visible_sprites, self.collectible_sprites])
                     elif obj_type == 'b':
-                        Bomb(pos, [self.visible_sprites, self.collectible_sprites])
+                        Bomb(pos, [self.visible_sprites, self.collectible_sprites], self.visible_sprites,
+                             self.obstacles_sprites, self.collectible_sprites)
                     elif obj_type == 't':
                         Suit(pos, [self.visible_sprites, self.collectible_sprites])
 
