@@ -3,6 +3,7 @@ from setings import *
 from coin import Coin
 from potion import Potion
 from bomb import Bomb
+from suit import Suit
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacles_sprites, collectible_sprites, level):
@@ -18,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.level = level
         self.coins = 0
         self.bombs = 0
+        self.has_suit = False
         self.starting_pos = pos
 
     def input(self):
@@ -68,9 +70,9 @@ class Player(pygame.sprite.Sprite):
                 break
 
         if current_magma and current_magma != self.last_magma:
-            self.health -= 2
-            print(self.health)
-
+            if not self.has_suit:  # Solo aplicar daño si el jugador no tiene el traje
+                self.health -= 2
+                print(self.health)
         self.last_magma = current_magma
 
 
@@ -113,11 +115,13 @@ class Player(pygame.sprite.Sprite):
                         print("Destruyendo tile:", tile.rect.topleft, "de tipo:", tile.tile_type)
                         tile.destroy()
 
-
+    def check_suit_collision(self):
+        for suit in self.get_colliding_sprites(Suit, self.collectible_sprites):
+            self.has_suit = True  # El jugador ahora tiene el traje
+            suit.kill()
 
     def get_colliding_sprites(self, sprite_type, group):
         return [sprite for sprite in group if isinstance(sprite, sprite_type) and self.rect.colliderect(sprite.rect)]
-
 
 
     def check_death(self):
@@ -139,3 +143,4 @@ class Player(pygame.sprite.Sprite):
         self.check_coin_collision()
         self.check_death()
         self.check_bomb_collision()
+        self.check_suit_collision()
