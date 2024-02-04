@@ -28,6 +28,21 @@ class Level:
         self.place_objects()
         self.player_won = False
 
+    def draw_ui(self):
+        font = pygame.font.Font(None, 30)  # Crea una fuente
+
+        # Dibujar la salud
+        health_text = font.render(f"Salud: {self.player.health}", True, (255, 255, 255))
+        self.display_surface.blit(health_text, (10, 10))
+
+        # Dibujar las bombas
+        bombs_text = font.render(f"Bombas: {self.player.bombs}", True, (255, 255, 255))
+        self.display_surface.blit(bombs_text, (10, 40))
+
+        # Dibujar las monedas
+        coins_text = font.render(f"Monedas: {self.player.coins}", True, (255, 255, 255))
+        self.display_surface.blit(coins_text, (10, 70))
+
 
     def read_map_and_objects(self, filename):
         with open(filename, 'r') as file:
@@ -51,11 +66,13 @@ class Level:
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
                 if col == 'x':
-                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_y', self.obstacles_sprites)
+                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_y', self.obstacles_sprites, destructible= False)
                 elif col == 'y':
-                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_x', self.obstacles_sprites)
+                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_x', self.obstacles_sprites, destructible= False)
+                elif col == 'z':  # Paredes destructibles
+                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_breakable', self.obstacles_sprites, destructible=True)
                 elif col == 'w':
-                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'magma', self.obstacles_sprites)
+                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'magma', self.obstacles_sprites, destructible=False)
                 elif col == 'p':
                     self.player = Player((x, y), [self.visible_sprites], self.obstacles_sprites,
                                          self.collectible_sprites, self)
@@ -94,9 +111,11 @@ class Level:
     def run(self):
         self.visible_sprites.curstom_draw(self.player)
         self.visible_sprites.update()
+        self.draw_ui()  # Llamar a la función para dibujar la UI
         self.check_win()
         if self.player_won:
             self.display_victory_message()
+
     def check_win(self):
         if self.player.coins == self.total_coins:
             self.player_won = True

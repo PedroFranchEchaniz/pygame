@@ -12,10 +12,10 @@ class Bomb(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=pos)
 
     def explode(self):
-        for sprite in self.all_sprites:
-            if self.rect.center.distance_to(sprite.rect.center) <= self.explosion_radius:
-                if isinstance(sprite, Tile):
-                    sprite.destroy()
-                elif isinstance(sprite, Bomb) and sprite != self:
-                    sprite.explode()
+        print("Exploding bomb at:", self.rect.center)
+        for sprite in self.obstacles_sprites:
+            if isinstance(sprite, Tile) and sprite.destructible:
+                distance = self.rect.center.distance_to(sprite.rect.center)
+                if distance <= self.explosion_radius:
+                    sprite.destroy()  # Esto debería llamarse
         self.kill()

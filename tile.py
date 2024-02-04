@@ -3,11 +3,13 @@ from setings import *
 
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, tile_type, obstacles_sprites):
+    def __init__(self, pos, groups, tile_type, obstacles_sprites,destructible):
         super().__init__(groups)
         self.tile_type = tile_type
         self.obstacles_sprites = obstacles_sprites
         self.load_image(tile_type)
+        self.destructible = destructible  # Añade esta línea
+
         self.rect = self.image.get_rect(topleft=pos)
 
     def load_image(self, tile_type):
@@ -17,6 +19,9 @@ class Tile(pygame.sprite.Sprite):
             image_path = 'assets/bricky.png'
         elif tile_type == 'magma':
             image_path = 'assets/magma.png'
+        elif tile_type == 'wall_breakable':
+            image_path = 'assets/box.png'
+
         else:
             image_path = None
 
@@ -28,6 +33,6 @@ class Tile(pygame.sprite.Sprite):
             self.image.fill((0, 0, 0, 0))  # Rellenar con transparente para tipos desconocidos
 
     def destroy(self):
-        if self in self.obstacles_sprites:
-            self.obstacles_sprites.remove(self)
-            self.kill()
+        if self.destructible:
+            print(f"Destroying tile at {self.rect.topleft}")
+            self.kill()  #

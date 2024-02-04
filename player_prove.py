@@ -1,9 +1,10 @@
 import pygame
-from setings import *
+from setings import *  # Asegúrate de que este archivo exista y esté correctamente configurado
 from coin import Coin
 from potion import Potion
 from bomb import Bomb
 from suit import Suit
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacles_sprites, collectible_sprites, level):
@@ -11,9 +12,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load('assets/character.png').convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
         self.health = 10
-        self.direction = pygame.math.Vector2()
+        self.direction = pygame.math.Vector2(0, 0)
         self.speed = 5
-        self.last_magma = None
         self.obstacles_sprites = obstacles_sprites
         self.collectible_sprites = collectible_sprites
         self.level = level
@@ -21,21 +21,69 @@ class Player(pygame.sprite.Sprite):
         self.bombs = 0
         self.has_suit = False
         self.starting_pos = pos
+        self.space_pressed = False
 
+        # Atributos para controlar la animación
+        self.anim_index = 0
+        self.anim_speed = 0.1  # Cuán rápido debe cambiar la animación
+        self.last_update = pygame.time.get_ticks()
+        self.anim_direction = 'down'
+        self.load_animations()
+
+    def load_animations(self):
+        new_size = (40, 40)
+        self.animations = {
+            'down': [
+                pygame.transform.scale(pygame.image.load(f'assets/character_down_{i}.png').convert_alpha(), new_size)
+                for i in range(4)],
+            'up': [pygame.transform.scale(pygame.image.load(f'assets/character_up_{i}.png').convert_alpha(), new_size)
+                   for i in range(4)],
+            'left': [
+                pygame.transform.scale(pygame.image.load(f'assets/character_left_{i}.png').convert_alpha(), new_size)
+                for i in range(4)],
+            'right': [
+                pygame.transform.scale(pygame.image.load(f'assets/character_right_{i}.png').convert_alpha(), new_size)
+                for i in range(4)],
+        }
+        self.anim_direction = 'down'
+        self.anim_index = 0
+        self.image = self.animations[self.anim_direction][self.anim_index]
+        self.rect = self.image.get_rect(topleft=self.rect.topleft)
     def input(self):
         keys = pygame.key.get_pressed()
         self.direction.x = keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]
         self.direction.y = keys[pygame.K_DOWN] - keys[pygame.K_UP]
+
+        if self.direction.x > 0:
+            self.anim_direction = 'right'
+        elif self.direction.x < 0:
+            self.anim_direction = 'left'
+        if self.direction.y > 0:
+            self.anim_direction = 'down'
+        elif self.direction.y < 0:
+            self.anim_direction = 'up'
+
         if keys[pygame.K_SPACE]:
-            self.use_bomb()
+            if not self.space_pressed:  # Si la tecla de espacio no fue presionada en el último cuadro
+                self.use_bomb()  # Usa una bomba
+                self.space_pressed = True  # Actualiza el estado para indicar que la tecla de espacio está siendo presionada
+        else:
+            self.space_pressed = False
+
+    def update_animation(self):
+        now = pygame.time.get_ticks()
+        if now - self.last_update > 1000 * self.anim_speed:
+            self.last_update = now
+            self.anim_index = (self.anim_index + 1) % len(self.animations[self.anim_direction])
+            self.image = self.animations[self.anim_direction][self.anim_index]
 
     def move(self, speed):
         if self.direction.magnitude() != 0:
-            self.direction = self.direction.normalize() * speed
-        self.rect.x += self.direction.x
-        self.collision('horizontal')
-        self.rect.y += self.direction.y
-        self.collision('vertical')
+            self.direction = self.direction.normalize()
+            self.rect.x += self.direction.x * speed
+            self.collision('horizontal')
+            self.rect.y += self.direction.y * speed
+            self.collision('vertical')
 
     def collision(self, direction):
         if direction == 'horizontal':
@@ -51,7 +99,6 @@ class Player(pygame.sprite.Sprite):
         if direction == 'vertical':
             for sprite in self.obstacles_sprites:
                 if sprite.rect.colliderect(self.rect):
-                    # Y también cambia sprite.type por sprite.tile_type aquí
                     if sprite.tile_type != 'magma':
                         if self.direction.y > 0:
                             self.rect.bottom = sprite.rect.top
@@ -64,13 +111,12 @@ class Player(pygame.sprite.Sprite):
     def check_magma_collision(self):
         current_magma = None
         for sprite in self.obstacles_sprites:
-            # Aquí cambiamos `sprite.type` por `sprite.tile_type`
             if sprite.tile_type == 'magma' and self.rect.colliderect(sprite.rect):
                 current_magma = sprite
                 break
 
         if current_magma and current_magma != self.last_magma:
-            if not self.has_suit:  # Solo aplicar daño si el jugador no tiene el traje
+            if not self.has_suit:
                 self.health -= 2
                 print(self.health)
         self.last_magma = current_magma
@@ -109,11 +155,10 @@ class Player(pygame.sprite.Sprite):
                                         TILESIZE * 3, TILESIZE * 3)
 
             for tile in self.level.obstacles_sprites:
-                if adjacent_area.colliderect(tile.rect):
+                if adjacent_area.colliderect(tile.rect) and tile.destructible:
                     print("Tile adyacente encontrado:", tile.rect.topleft, "de tipo:", tile.tile_type)
-                    if tile.tile_type in ['wall_x', 'wall_y']:
-                        print("Destruyendo tile:", tile.rect.topleft, "de tipo:", tile.tile_type)
-                        tile.destroy()
+                    print("Destruyendo tile:", tile.rect.topleft, "de tipo:", tile.tile_type)
+                    tile.destroy()
 
     def check_suit_collision(self):
         for suit in self.get_colliding_sprites(Suit, self.collectible_sprites):
@@ -137,6 +182,8 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.input()
+        if self.direction.magnitude() != 0:  # Si hay movimiento, actualiza la animación
+            self.update_animation()
         self.move(self.speed)
         self.check_magma_collision()
         self.check_potion_collision()
