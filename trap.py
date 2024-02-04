@@ -7,10 +7,9 @@ class Trap(pygame.sprite.Sprite):
         super().__init__(groups)
         super().__init__(groups)
         self.tile_type = 'trap'
-        # Asegúrate de llamar a load_frames para ajustar el tamaño de los frames
         self.frames = self.load_frames(animation_frames)
         self.current_frame = 0
-        self.image = self.frames[self.current_frame]  # La imagen inicial ya estará ajustada.
+        self.image = self.frames[self.current_frame]
         self.rect = self.image.get_rect(topleft=pos)
         self.damage = damage
         self.last_update = pygame.time.get_ticks()
@@ -38,7 +37,6 @@ class Trap(pygame.sprite.Sprite):
         self.animate()
 
     def is_active(self):
-        # La trampa hace daño solo si los pinchos están completamente arriba
         return self.is_up
 
     def reset(self):

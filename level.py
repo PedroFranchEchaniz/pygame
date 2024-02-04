@@ -85,12 +85,8 @@ class Level:
         for obj_type, count in self.object_counts.items():
             for _ in range(count):
                 if self.free_spaces:
-                    # Elige una posición aleatoria de los espacios libres disponibles
                     pos = random.choice(self.free_spaces)
-                    # Remueve la posición elegida de la lista de espacios libres para evitar colocar otro objeto allí
                     self.free_spaces.remove(pos)
-
-                    # Crea los objetos en la posición elegida
                     if obj_type == 'o':
                         Potion(pos, [self.visible_sprites, self.collectible_sprites])
                     elif obj_type == 'd':
@@ -100,7 +96,6 @@ class Level:
                              self.obstacles_sprites, self.collectible_sprites)
                     elif obj_type == 't':
                         Suit(pos, [self.visible_sprites, self.collectible_sprites])
-                    # Asegúrate de que estas posiciones estén efectivamente dentro de los límites establecidos por las paredes 'x' e 'y'
 
     def restart_level(self):
         self.visible_sprites.empty()

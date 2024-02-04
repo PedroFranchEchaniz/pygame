@@ -187,7 +187,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.input()
-        if self.direction.magnitude() != 0:  # Si hay movimiento, actualiza la animación
+        if self.direction.magnitude() != 0:
             self.update_animation()
         self.move(self.speed)
         self.check_magma_collision()
