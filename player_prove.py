@@ -63,9 +63,9 @@ class Player(pygame.sprite.Sprite):
             self.anim_direction = 'up'
 
         if keys[pygame.K_SPACE]:
-            if not self.space_pressed:  # Si la tecla de espacio no fue presionada en el último cuadro
-                self.use_bomb()  # Usa una bomba
-                self.space_pressed = True  # Actualiza el estado para indicar que la tecla de espacio está siendo presionada
+            if not self.space_pressed:
+                self.use_bomb()
+                self.space_pressed = True
         else:
             self.space_pressed = False
 
@@ -160,7 +160,7 @@ class Player(pygame.sprite.Sprite):
 
     def check_suit_collision(self):
         for suit in self.get_colliding_sprites(Suit, self.collectible_sprites):
-            self.has_suit = True  # El jugador ahora tiene el traje
+            self.has_suit = True
             suit.kill()
 
     def get_colliding_sprites(self, sprite_type, group):
@@ -172,9 +172,9 @@ class Player(pygame.sprite.Sprite):
             self.restart_game()
 
     def check_trap_collision(self):
-        hits = pygame.sprite.spritecollide(self, self.level.trap_group, False)  # Verifica que se accede correctamente
+        hits = pygame.sprite.spritecollide(self, self.level.trap_group, False)
         for trap in hits:
-            if trap.is_active():  # Verifica si la trampa está activa para aplicar daño
+            if trap.is_active():
                 self.health -= trap.damage
                 print(f"Vida restante: {self.health}")
 

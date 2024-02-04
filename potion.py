@@ -1,7 +1,6 @@
 import pygame
+from entity import Entity
 
-class Potion(pygame.sprite.Sprite):
+class Potion(Entity):
     def __init__(self, pos, groups):
-        super().__init__(groups)
-        self.image = pygame.image.load("assets/potion.png").convert_alpha()
-        self.rect = self.image.get_rect(topleft=pos)
+        super().__init__(pos, groups, "assets/potion.png")

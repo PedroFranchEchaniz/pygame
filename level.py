@@ -119,7 +119,7 @@ class Level:
     def run(self):
         self.visible_sprites.curstom_draw(self.player)
         self.visible_sprites.update()
-        self.draw_ui()  # Llamar a la función para dibujar la UI
+        self.draw_ui()
         self.check_win()
         if self.player_won:
             self.display_victory_message()
@@ -131,7 +131,7 @@ class Level:
     def display_victory_message(self):
         font = pygame.font.Font(None, 50)
 
-        text_surface = font.render("¡Has ganado!", True, (255, 255, 255))  # Texto blanco
+        text_surface = font.render("¡Has ganado!", True, (255, 255, 255))
 
         screen_width, screen_height = self.display_surface.get_size()
         text_width, text_height = text_surface.get_size()

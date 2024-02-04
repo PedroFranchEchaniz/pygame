@@ -1,7 +1,6 @@
 import pygame
+from entity import Entity
 
-class Coin (pygame.sprite.Sprite):
+class Coin (Entity):
     def __init__(self, pos, groups):
-        super().__init__(groups)
-        self.image = pygame.image.load("assets/coin_4.png").convert_alpha()
-        self.rect = self.image.get_rect(topleft=pos)
+        super().__init__(pos, groups, "assets/coin_4.png")
