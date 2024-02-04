@@ -8,7 +8,7 @@ class Tile(pygame.sprite.Sprite):
         self.tile_type = tile_type
         self.obstacles_sprites = obstacles_sprites
         self.load_image(tile_type)
-        self.destructible = destructible  # Añade esta línea
+        self.destructible = destructible
 
         self.rect = self.image.get_rect(topleft=pos)
 
@@ -30,7 +30,7 @@ class Tile(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(image, (TILESIZE, TILESIZE))
         else:
             self.image = pygame.Surface((TILESIZE, TILESIZE), pygame.SRCALPHA)
-            self.image.fill((0, 0, 0, 0))  # Rellenar con transparente para tipos desconocidos
+            self.image.fill((0, 0, 0, 0))
 
     def destroy(self):
         if self.destructible:

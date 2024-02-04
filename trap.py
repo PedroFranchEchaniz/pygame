@@ -1,28 +1,29 @@
 import pygame
+from setings import TILESIZE
 
 
 class Trap(pygame.sprite.Sprite):
     def __init__(self, pos, groups, animation_frames, damage):
         super().__init__(groups)
         self.tile_type = 'trap'
-        self.frames = animation_frames  # Lista de imágenes para la animación
+        self.frames = self.load_frames(animation_frames)
         self.current_frame = 0
-        self.image = self.frames[self.current_frame]  # Imagen actual mostrada
+        self.image = self.frames[self.current_frame]
         self.rect = self.image.get_rect(topleft=pos)
         self.damage = damage
         self.last_update = pygame.time.get_ticks()
-        self.frame_rate = 100  # Ajusta para controlar la velocidad de animación
-        self.active_frame = len(self.frames) - 1  # Índice del frame donde las picas están completamente fuera
-        self.animation_direction = 1  # Comienza animando hacia adelante
+        self.frame_rate = 500
+        self.animation_direction = 1
+
+    def load_frames(self, animation_frames):
+        adjusted_frames = [pygame.transform.scale(frame, (TILESIZE, TILESIZE)) for frame in animation_frames]
+        return adjusted_frames
 
     def animate(self):
         now = pygame.time.get_ticks()
         if now - self.last_update > self.frame_rate:
             self.last_update = now
-            # Actualiza el frame actual basado en la dirección de la animación
             self.current_frame += self.animation_direction
-
-            # Invierte la animación si alcanza el final o el inicio
             if self.current_frame >= len(self.frames):
                 self.current_frame = len(self.frames) - 2
                 self.animation_direction = -1
@@ -36,5 +37,11 @@ class Trap(pygame.sprite.Sprite):
         self.animate()
 
     def is_active(self):
-        # La trampa está activa solo en el frame específico
-        return self.current_frame == self.active_frame
+        active_frame = [3]
+        margin_frame = [0, 1, 2]
+        return self.current_frame in active_frame and self.current_frame not in margin_frame
+
+    def reset(self):
+        self.current_frame = 0
+        self.animation_direction = 1
+        self.last_update = pygame.time.get_ticks()

@@ -7,8 +7,10 @@ class Bomb(pygame.sprite.Sprite):
         self.explosion_radius = explosion_radius
         self.all_sprites = all_sprites
         self.obstacles_sprites = obstacles_sprites
-        self.image = pygame.Surface((20, 20))  # Temporal, usa una imagen adecuada
-        self.image.fill((255, 0, 0))  # Temporal, usa una imagen adecuada
+        self.image = pygame.image.load("assets/pngwing.com.png").convert_alpha()
+        new_size = (20, 20)
+        self.image = pygame.transform.scale(self.image, new_size)
+
         self.rect = self.image.get_rect(center=pos)
 
     def explode(self):

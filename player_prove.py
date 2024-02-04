@@ -22,10 +22,8 @@ class Player(pygame.sprite.Sprite):
         self.has_suit = False
         self.starting_pos = pos
         self.space_pressed = False
-
-        # Atributos para controlar la animación
         self.anim_index = 0
-        self.anim_speed = 0.1  # Cuán rápido debe cambiar la animación
+        self.anim_speed = 0.1
         self.last_update = pygame.time.get_ticks()
         self.anim_direction = 'down'
         self.load_animations()
@@ -141,7 +139,6 @@ class Player(pygame.sprite.Sprite):
             coin.kill()
 
     def check_bomb_collision(self):
-        # Este método se llamaría en la actualización del jugador para verificar si ha recogido una bomba.
         for bomb in self.get_colliding_sprites(Bomb, self.collectible_sprites):
             self.bombs += 1
             bomb.kill()
@@ -151,7 +148,7 @@ class Player(pygame.sprite.Sprite):
             print("Usando bomba, bombas restantes:", self.bombs - 1)
             self.bombs -= 1
 
-            # Área alrededor del jugador para considerar como adyacente
+
             adjacent_area = pygame.Rect(self.rect.x - TILESIZE, self.rect.y - TILESIZE,
                                         TILESIZE * 3, TILESIZE * 3)
 
@@ -175,10 +172,9 @@ class Player(pygame.sprite.Sprite):
             self.restart_game()
 
     def check_trap_collision(self):
-        hits = pygame.sprite.spritecollide(self, self.level.trap_group,
-                                           False)  # Asegúrate de usar el grupo correcto aquí
+        hits = pygame.sprite.spritecollide(self, self.level.trap_group, False)  # Verifica que se accede correctamente
         for trap in hits:
-            if trap.is_active():  # Solo aplica daño si la trampa está en su estado activo
+            if trap.is_active():  # Verifica si la trampa está activa para aplicar daño
                 self.health -= trap.damage
                 print(f"Vida restante: {self.health}")
 
@@ -200,3 +196,4 @@ class Player(pygame.sprite.Sprite):
         self.check_death()
         self.check_bomb_collision()
         self.check_suit_collision()
+        self.check_trap_collision()

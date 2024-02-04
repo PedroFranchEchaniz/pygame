@@ -24,7 +24,7 @@ class Level:
         self.total_coins = sum(value for key, value in self.object_counts.items() if key == 'd')
 
         self.free_spaces = []
-        self.trap_group = pygame.sprite.Group()
+        self.trap_group = pygame.sprite.Group()  # Asegúrate de que esto está presente
         self.create_map()
         self.place_objects()
         self.player_won = False
@@ -80,11 +80,11 @@ class Level:
                 elif col == 'w':
                     Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'magma', self.obstacles_sprites, destructible=False)
                 elif col == 'p':
-                    self.player = Player((x, y), [self.visible_sprites], self.obstacles_sprites, self.collectible_sprites, self.trap_group, self)
+                    self.player = Player((x, y), [self.visible_sprites], self.obstacles_sprites, self.collectible_sprites, self, self.trap_group)
                     self.player.coins = 0
                 elif col == 'k':
                     trap_frames = [pygame.image.load(f'assets/trap_state_{i}.png').convert_alpha() for i in range(4)]
-                    Trap((x, y), [self.visible_sprites, self.obstacles_sprites], trap_frames, damage=1)
+                    Trap((x, y), [self.visible_sprites, self.trap_group], trap_frames, damage=1)
                 elif col == ' ':
                     self.free_spaces.append((x, y))
 
