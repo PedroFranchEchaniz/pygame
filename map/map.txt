@@ -1,8 +1,8 @@
 o=2, d=5, b=2, t=1
 
 xxxxxxxxxxxxxxxxxxxx
-y                  y
-y p                y
+y  k               y
+y pk               y
 y  y     zzzzz     y
 y  y         y     y
 y  y         y     y
@@ -11,7 +11,7 @@ y  y         y     y
 y  y         y     y
 y  y         y     y
 y  y         y     y
-y  y         xxx   y
+ykky         xxx   y
 y                  y
 y      zzzzz       y
 y        wwww      y

@@ -35,4 +35,4 @@ class Tile(pygame.sprite.Sprite):
     def destroy(self):
         if self.destructible:
             print(f"Destroying tile at {self.rect.topleft}")
-            self.kill()  #
+            self.kill()

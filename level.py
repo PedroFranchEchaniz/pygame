@@ -8,6 +8,7 @@ from potion import Potion
 from coin import Coin
 from bomb import Bomb
 from suit import Suit
+from trap import Trap
 
 class Level:
     def __init__(self):
@@ -23,10 +24,14 @@ class Level:
         self.total_coins = sum(value for key, value in self.object_counts.items() if key == 'd')
 
         self.free_spaces = []
-
+        self.trap_group = pygame.sprite.Group()
         self.create_map()
         self.place_objects()
         self.player_won = False
+
+
+
+
 
     def draw_ui(self):
         font = pygame.font.Font(None, 30)  # Crea una fuente
@@ -60,6 +65,7 @@ class Level:
             object_counts[key] = int(value)
         return object_counts
 
+
     def create_map(self):
         for row_index, row in enumerate(WORLD_MAP2):
             for col_index, col in enumerate(row):
@@ -74,9 +80,11 @@ class Level:
                 elif col == 'w':
                     Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'magma', self.obstacles_sprites, destructible=False)
                 elif col == 'p':
-                    self.player = Player((x, y), [self.visible_sprites], self.obstacles_sprites,
-                                         self.collectible_sprites, self)
+                    self.player = Player((x, y), [self.visible_sprites], self.obstacles_sprites, self.collectible_sprites, self.trap_group, self)
                     self.player.coins = 0
+                elif col == 'k':
+                    trap_frames = [pygame.image.load(f'assets/trap_state_{i}.png').convert_alpha() for i in range(4)]
+                    Trap((x, y), [self.visible_sprites, self.obstacles_sprites], trap_frames, damage=1)
                 elif col == ' ':
                     self.free_spaces.append((x, y))
 

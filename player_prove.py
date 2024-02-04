@@ -7,7 +7,7 @@ from suit import Suit
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, obstacles_sprites, collectible_sprites, level):
+    def __init__(self, pos, groups, obstacles_sprites, collectible_sprites, level, trap_group):
         super().__init__(groups)
         self.image = pygame.image.load('assets/character.png').convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
@@ -29,6 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.last_update = pygame.time.get_ticks()
         self.anim_direction = 'down'
         self.load_animations()
+        self.trap_group = trap_group
 
     def load_animations(self):
         new_size = (40, 40)
@@ -172,6 +173,14 @@ class Player(pygame.sprite.Sprite):
     def check_death(self):
         if self.health <= 0:
             self.restart_game()
+
+    def check_trap_collision(self):
+        hits = pygame.sprite.spritecollide(self, self.level.trap_group,
+                                           False)  # Asegúrate de usar el grupo correcto aquí
+        for trap in hits:
+            if trap.is_active():  # Solo aplica daño si la trampa está en su estado activo
+                self.health -= trap.damage
+                print(f"Vida restante: {self.health}")
 
     def restart_game(self):
         print("Has perdido. El juego se reiniciará.")
