@@ -29,22 +29,15 @@ class Level:
         self.place_objects()
         self.player_won = False
 
-
-
-
-
     def draw_ui(self):
         font = pygame.font.Font(None, 30)  # Crea una fuente
 
-        # Dibujar la salud
         health_text = font.render(f"Salud: {self.player.health}", True, (255, 255, 255))
         self.display_surface.blit(health_text, (10, 10))
 
-        # Dibujar las bombas
         bombs_text = font.render(f"Bombas: {self.player.bombs}", True, (255, 255, 255))
         self.display_surface.blit(bombs_text, (10, 40))
 
-        # Dibujar las monedas
         coins_text = font.render(f"Monedas: {self.player.coins}", True, (255, 255, 255))
         self.display_surface.blit(coins_text, (10, 70))
 
@@ -92,8 +85,12 @@ class Level:
         for obj_type, count in self.object_counts.items():
             for _ in range(count):
                 if self.free_spaces:
+                    # Elige una posición aleatoria de los espacios libres disponibles
                     pos = random.choice(self.free_spaces)
+                    # Remueve la posición elegida de la lista de espacios libres para evitar colocar otro objeto allí
                     self.free_spaces.remove(pos)
+
+                    # Crea los objetos en la posición elegida
                     if obj_type == 'o':
                         Potion(pos, [self.visible_sprites, self.collectible_sprites])
                     elif obj_type == 'd':
@@ -103,6 +100,7 @@ class Level:
                              self.obstacles_sprites, self.collectible_sprites)
                     elif obj_type == 't':
                         Suit(pos, [self.visible_sprites, self.collectible_sprites])
+                    # Asegúrate de que estas posiciones estén efectivamente dentro de los límites establecidos por las paredes 'x' e 'y'
 
     def restart_level(self):
         self.visible_sprites.empty()
@@ -127,6 +125,9 @@ class Level:
     def check_win(self):
         if self.player.coins == self.total_coins:
             self.player_won = True
+            pygame.time.wait(2000)
+            self.display_victory_message()
+            self.restart_level()
 
     def display_victory_message(self):
         font = pygame.font.Font(None, 50)

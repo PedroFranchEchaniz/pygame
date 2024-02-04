@@ -1,12 +1,11 @@
-o=2, d=5, b=2, t=1
-
-xxxxxxxxxxxxxxxxxxxx
+o=2, d=5, b=4, t=2
+yxxxxxxxxxxxxxxxxxxy
 y  k               y
 y pk               y
 y  y     zzzzz     y
 y  y         y     y
-y  y         y     y
-y  y         y     y
+y  z         y     z
+y  z         y     z
 y  y         y     y
 y  y         y     y
 y  y         y     y
@@ -19,4 +18,4 @@ y  wwww   wwwww    y
 y      wwwww       y
 y                  y
 y                  y
-xxxxxxxxxxxxxxxxxxxx
+yxxxxxxxxxxxxxxxxxxy
