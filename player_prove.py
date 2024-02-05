@@ -104,9 +104,6 @@ class Player(pygame.sprite.Sprite):
                             self.rect.bottom = sprite.rect.top
                         elif self.direction.y < 0:
                             self.rect.top = sprite.rect.bottom
-    def check_death(self):
-        if self.health <= 0:
-            self.restart_game()
 
     def check_magma_collision(self):
         current_magma = None
