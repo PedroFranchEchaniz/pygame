@@ -1,21 +1,21 @@
 o=2, d=5, b=4, t=2
-yxxxxxxxxxxxxxxxxxxy
-y  k               y
-y pk               y
-y  y     zzzzz     y
-y  y         y     y
-y  z         y     z
-y  z         y     z
-y  y         y     y
-y  y         y     y
-y  y         y     y
-y  y         y     y
-ykky         xxx   y
-y                  y
-y      zzzzz       y
-y        wwww      y
-y  wwww   wwwww    y
-y      wwwww       y
-y                  y
-y                  y
-yxxxxxxxxxxxxxxxxxxy
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+y  k       p             k                           y
+y  k                     k                           y
+y  y     xxxxx       xxxxxx                          y
+y  y         y       y                               y
+y  z         y       y                               y
+y  z         y       y           wwwww               y
+y  y         y       xxxxk         wwwwww            y
+y  y         y            wwww wwwwwww               y
+y  y         y       yxxxxxx      wwwwwwww           y
+y  y         y       y              z    z           y
+ykkykkzzzzzzz xxxxkkxx              z    k wwwwwww   y
+y                                   zz  zzzwwwwwwww  y
+y      zzzzz                        z        www     y
+y        wwww                       z         www    y
+y  wwww   wwwww                     zzzzzzzzzwwww    y
+y      wwwww                                         y
+y                                                    y
+y                                                    y
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

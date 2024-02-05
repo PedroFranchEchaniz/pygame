@@ -1,7 +1,7 @@
 import pygame
 
 class Entity(pygame.sprite.Sprite):
-    default_size = (20, 20)
+    default_size = (25, 25)
 
     def __init__(self, pos, groups, image_path, size=None):
         super().__init__(groups)

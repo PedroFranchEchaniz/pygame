@@ -16,6 +16,8 @@ class Trap(pygame.sprite.Sprite):
         self.frame_rate = 500
         self.active_frame = len(self.frames) - 1
         self.is_up = False
+        self.down_frames = [0, 1, 2]
+        self.active_frames = [3]
 
     def load_frames(self, animation_frames):
         adjusted_frames = [pygame.transform.scale(frame, (TILESIZE, TILESIZE)) for frame in animation_frames]
@@ -26,11 +28,13 @@ class Trap(pygame.sprite.Sprite):
         if now - self.last_update > self.frame_rate:
             self.last_update = now
             self.current_frame += 1
-            if self.current_frame == self.active_frame:
+            if self.current_frame in self.down_frames:
+                self.is_up = False
+            elif self.current_frame in self.active_frames:
                 self.is_up = True
             elif self.current_frame >= len(self.frames):
                 self.current_frame = 0
-                self.is_up = False
+                self.is_up = 0 not in self.down_frames
             self.image = self.frames[self.current_frame]
 
     def update(self):
@@ -39,7 +43,4 @@ class Trap(pygame.sprite.Sprite):
     def is_active(self):
         return self.is_up
 
-    def reset(self):
-        self.current_frame = 0
-        self.animation_direction = 1
-        self.last_update = pygame.time.get_ticks()
+

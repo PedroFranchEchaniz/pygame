@@ -41,6 +41,9 @@ class Level:
         coins_text = font.render(f"Monedas: {self.player.coins}", True, (255, 255, 255))
         self.display_surface.blit(coins_text, (10, 70))
 
+        suit_test = font.render(f"Inmune: {self.player.has_suit}", True, (255, 255, 255))
+        self.display_surface.blit(suit_test, (10, 100))
+
 
     def read_map_and_objects(self, filename):
         with open(filename, 'r') as file:

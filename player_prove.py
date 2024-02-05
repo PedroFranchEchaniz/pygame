@@ -48,6 +48,7 @@ class Player(pygame.sprite.Sprite):
         self.anim_index = 0
         self.image = self.animations[self.anim_direction][self.anim_index]
         self.rect = self.image.get_rect(topleft=self.rect.topleft)
+
     def input(self):
         keys = pygame.key.get_pressed()
         self.direction.x = keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]
