@@ -1,5 +1,5 @@
 import pygame
-from setings import *  # Asegúrate de que este archivo exista y esté correctamente configurado
+from setings import *
 from coin import Coin
 from potion import Potion
 from bomb import Bomb
@@ -28,6 +28,7 @@ class Player(pygame.sprite.Sprite):
         self.anim_direction = 'down'
         self.load_animations()
         self.trap_group = trap_group
+        self.moving = False
 
     def load_animations(self):
         new_size = (40, 40)
@@ -50,10 +51,12 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=self.rect.topleft)
 
     def input(self):
+        self.moving = False
         keys = pygame.key.get_pressed()
         self.direction.x = keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]
         self.direction.y = keys[pygame.K_DOWN] - keys[pygame.K_UP]
-
+        if self.direction.x != 0 or self.direction.y != 0:
+            self.moving = True
         if self.direction.x > 0:
             self.anim_direction = 'right'
         elif self.direction.x < 0:
@@ -89,7 +92,6 @@ class Player(pygame.sprite.Sprite):
         if direction == 'horizontal':
             for sprite in self.obstacles_sprites:
                 if sprite.rect.colliderect(self.rect):
-                    # Cambia sprite.type por sprite.tile_type aquí
                     if sprite.tile_type != 'magma':
                         if self.direction.x > 0:
                             self.rect.right = sprite.rect.left
@@ -174,7 +176,9 @@ class Player(pygame.sprite.Sprite):
         for trap in hits:
             if trap.is_active():
                 self.health -= trap.damage
-                print(f"Vida restante: {self.health}")
+                if self.health <= 0:
+                    self.is_alive = False
+                    self.level.display_loser_screen()
 
     def restart_game(self):
         print("Has perdido. El juego se reiniciará.")
@@ -184,14 +188,19 @@ class Player(pygame.sprite.Sprite):
         self.level.restart_level()
 
     def update(self):
-        self.input()
-        if self.direction.magnitude() != 0:
-            self.update_animation()
-        self.move(self.speed)
-        self.check_magma_collision()
-        self.check_potion_collision()
-        self.check_coin_collision()
-        self.check_death()
-        self.check_bomb_collision()
-        self.check_suit_collision()
-        self.check_trap_collision()
+        if self.health <= 0:
+            self.is_alive = False
+        else:
+            self.input()
+            if self.moving:
+                self.move(self.speed)
+                self.update_animation()
+            else:
+                self.anim_index = 0
+                self.image = self.animations[self.anim_direction][self.anim_index]
+            self.check_magma_collision()
+            self.check_potion_collision()
+            self.check_coin_collision()
+            self.check_bomb_collision()
+            self.check_suit_collision()
+            self.check_trap_collision()

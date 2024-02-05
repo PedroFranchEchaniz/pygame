@@ -24,13 +24,15 @@ class Level:
         self.total_coins = sum(value for key, value in self.object_counts.items() if key == 'd')
 
         self.free_spaces = []
-        self.trap_group = pygame.sprite.Group()  # Asegúrate de que esto está presente
+        self.trap_group = pygame.sprite.Group()
         self.create_map()
         self.place_objects()
         self.player_won = False
+        self.game_over = False
+
 
     def draw_ui(self):
-        font = pygame.font.Font(None, 30)  # Crea una fuente
+        font = pygame.font.Font(None, 30)
 
         health_text = font.render(f"Salud: {self.player.health}", True, (255, 255, 255))
         self.display_surface.blit(health_text, (10, 10))
@@ -101,15 +103,22 @@ class Level:
                         Suit(pos, [self.visible_sprites, self.collectible_sprites])
 
     def restart_level(self):
+        self.player.health = 10
+        self.player.coins = 0
+        self.player.bombs = 0
+        self.player.has_suit = False
+        self.player.last_magma = None
+
+        self.player.rect.topleft = self.player.starting_pos
+
         self.visible_sprites.empty()
         self.obstacles_sprites.empty()
         self.collectible_sprites.empty()
+        self.trap_group.empty()
         self.free_spaces.clear()
         self.create_map()
         self.place_objects()
-        self.player.coins = 0
-        self.player.health = 10
-        self.player.rect.topleft = self.player.starting_pos
+
         self.player_won = False
 
     def run(self):
@@ -122,20 +131,42 @@ class Level:
 
     def check_win(self):
         if self.player.coins == self.total_coins:
-            self.player_won = True
-            self.display_victory_message()
-            pygame.time.wait(2000)
-            self.restart_level()
+            self.display_winner_screen()
 
-    def display_victory_message(self):
+    def check_lose(self):
+        if self.player.health <= 0:
+            self.display_loser_screen()
+
+    def display_winner_screen(self):
+        self.game_over_screen("¡Has ganado! Pulsa Intro para reiniciar o Escape para salir.")
+
+    def display_loser_screen(self):
+        self.game_over_screen("Has muerto. Pulsa Intro para reiniciar o Escape para salir.")
+
+    def game_over_screen(self, message):
+        self.display_surface.fill((0, 0, 0))
         font = pygame.font.Font(None, 50)
-        text_surface = font.render("¡Has ganado!", True, (255, 255, 255))
-        screen_width, screen_height = self.display_surface.get_size()
-        text_width, text_height = text_surface.get_size()
-        x = (screen_width - text_width) // 2
-        y = (screen_height - text_height) // 2
-        self.display_surface.blit(text_surface, (x, y))
+        text_surface = font.render(message, True, (255, 255, 255))
+        text_rect = text_surface.get_rect(
+            center=(self.display_surface.get_width() / 2, self.display_surface.get_height() / 2))
+        self.display_surface.blit(text_surface, text_rect)
+        pygame.display.flip()
+        self.wait_for_player_action()
 
+    def wait_for_player_action(self):
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        waiting = False
+                        self.restart_level()
+                    elif event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        exit()
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
