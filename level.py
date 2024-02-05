@@ -123,21 +123,17 @@ class Level:
     def check_win(self):
         if self.player.coins == self.total_coins:
             self.player_won = True
-            pygame.time.wait(2000)
             self.display_victory_message()
+            pygame.time.wait(2000)
             self.restart_level()
 
     def display_victory_message(self):
         font = pygame.font.Font(None, 50)
-
         text_surface = font.render("¡Has ganado!", True, (255, 255, 255))
-
         screen_width, screen_height = self.display_surface.get_size()
         text_width, text_height = text_surface.get_size()
-
         x = (screen_width - text_width) // 2
         y = (screen_height - text_height) // 2
-
         self.display_surface.blit(text_surface, (x, y))
 
 class YSortCameraGroup(pygame.sprite.Group):
