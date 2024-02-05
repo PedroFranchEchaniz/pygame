@@ -16,6 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = 5
         self.obstacles_sprites = obstacles_sprites
         self.collectible_sprites = collectible_sprites
+
         self.level = level
         self.coins = 0
         self.bombs = 0
@@ -165,11 +166,6 @@ class Player(pygame.sprite.Sprite):
 
     def get_colliding_sprites(self, sprite_type, group):
         return [sprite for sprite in group if isinstance(sprite, sprite_type) and self.rect.colliderect(sprite.rect)]
-
-
-    def check_death(self):
-        if self.health <= 0:
-            self.restart_game()
 
     def check_trap_collision(self):
         hits = pygame.sprite.spritecollide(self, self.level.trap_group, False)

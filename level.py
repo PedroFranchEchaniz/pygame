@@ -9,6 +9,7 @@ from coin import Coin
 from bomb import Bomb
 from suit import Suit
 from trap import Trap
+from map import *
 
 class Level:
     def __init__(self):
@@ -30,6 +31,7 @@ class Level:
         self.player_won = False
         self.game_over = False
 
+        #img para ui
         self.heart_image = pygame.image.load('assets/heart.png').convert_alpha()
         self.heart_image = pygame.transform.scale(self.heart_image, (24, 24))
 
@@ -45,22 +47,18 @@ class Level:
     def draw_ui(self):
         font = pygame.font.Font(None, 30)
 
-        # Dibuja el ícono de salud y el texto
         self.display_surface.blit(self.heart_image, (10, 10))
         health_text = font.render(f"x {self.player.health}", True, (255, 255, 255))
         self.display_surface.blit(health_text, (40, 10))
 
-        # Dibuja el ícono de bombas y el texto
         self.display_surface.blit(self.bomb_image, (10, 40))
         bombs_text = font.render(f"x {self.player.bombs}", True, (255, 255, 255))
         self.display_surface.blit(bombs_text, (40, 40))
 
-        # Dibuja el ícono de monedas y el texto
         self.display_surface.blit(self.coin_image, (10, 70))
         coins_text = font.render(f"x {self.player.coins}", True, (255, 255, 255))
         self.display_surface.blit(coins_text, (40, 70))
 
-        # Dibuja el ícono de traje y el texto
         self.display_surface.blit(self.suit_image, (10, 100))
         suit_text = font.render(f"x {int(self.player.has_suit)}", True, (255, 255, 255))
         self.display_surface.blit(suit_text, (40, 100))
@@ -84,7 +82,7 @@ class Level:
 
 
     def create_map(self):
-        for row_index, row in enumerate(WORLD_MAP2):
+        for row_index, row in enumerate(self.map_data):
             for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
@@ -140,13 +138,7 @@ class Level:
 
         self.player_won = False
 
-    def run(self):
-        self.visible_sprites.curstom_draw(self.player)
-        self.visible_sprites.update()
-        self.draw_ui()
-        self.check_win()
-        if self.player_won:
-            self.display_victory_message()
+
 
     def check_win(self):
         if self.player.coins == self.total_coins:
@@ -154,6 +146,7 @@ class Level:
 
     def check_lose(self):
         if self.player.health <= 0:
+            self.game_over = True
             self.display_loser_screen()
 
     def display_winner_screen(self):
@@ -186,6 +179,15 @@ class Level:
                     elif event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         exit()
+
+    def run(self):
+        self.visible_sprites.curstom_draw(self.player)
+        self.visible_sprites.update()
+        self.check_lose()
+        self.draw_ui()
+        self.check_win()
+        if self.player_won:
+            self.display_victory_message()
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
