@@ -30,21 +30,40 @@ class Level:
         self.player_won = False
         self.game_over = False
 
+        self.heart_image = pygame.image.load('assets/heart.png').convert_alpha()
+        self.heart_image = pygame.transform.scale(self.heart_image, (24, 24))
+
+        self.coin_image = pygame.image.load('assets/coin_4.png').convert_alpha()
+        self.coin_image = pygame.transform.scale(self.coin_image, (24, 24))
+
+        self.bomb_image = pygame.image.load('assets/pngwing.com.png').convert_alpha()
+        self.bomb_image = pygame.transform.scale(self.bomb_image, (24, 24))
+
+        self.suit_image = pygame.image.load('assets/flasks_3_4.png').convert_alpha()
+        self.suit_image = pygame.transform.scale(self.suit_image, (24, 24))
 
     def draw_ui(self):
         font = pygame.font.Font(None, 30)
 
-        health_text = font.render(f"Salud: {self.player.health}", True, (255, 255, 255))
-        self.display_surface.blit(health_text, (10, 10))
+        # Dibuja el ícono de salud y el texto
+        self.display_surface.blit(self.heart_image, (10, 10))
+        health_text = font.render(f"x {self.player.health}", True, (255, 255, 255))
+        self.display_surface.blit(health_text, (40, 10))
 
-        bombs_text = font.render(f"Bombas: {self.player.bombs}", True, (255, 255, 255))
-        self.display_surface.blit(bombs_text, (10, 40))
+        # Dibuja el ícono de bombas y el texto
+        self.display_surface.blit(self.bomb_image, (10, 40))
+        bombs_text = font.render(f"x {self.player.bombs}", True, (255, 255, 255))
+        self.display_surface.blit(bombs_text, (40, 40))
 
-        coins_text = font.render(f"Monedas: {self.player.coins}", True, (255, 255, 255))
-        self.display_surface.blit(coins_text, (10, 70))
+        # Dibuja el ícono de monedas y el texto
+        self.display_surface.blit(self.coin_image, (10, 70))
+        coins_text = font.render(f"x {self.player.coins}", True, (255, 255, 255))
+        self.display_surface.blit(coins_text, (40, 70))
 
-        suit_test = font.render(f"Inmune: {self.player.has_suit}", True, (255, 255, 255))
-        self.display_surface.blit(suit_test, (10, 100))
+        # Dibuja el ícono de traje y el texto
+        self.display_surface.blit(self.suit_image, (10, 100))
+        suit_text = font.render(f"x {int(self.player.has_suit)}", True, (255, 255, 255))
+        self.display_surface.blit(suit_text, (40, 100))
 
 
     def read_map_and_objects(self, filename):
@@ -73,7 +92,7 @@ class Level:
                     Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_y', self.obstacles_sprites, destructible= False)
                 elif col == 'y':
                     Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_x', self.obstacles_sprites, destructible= False)
-                elif col == 'z':  # Paredes destructibles
+                elif col == 'z':
                     Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'wall_breakable', self.obstacles_sprites, destructible=True)
                 elif col == 'w':
                     Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'magma', self.obstacles_sprites, destructible=False)
